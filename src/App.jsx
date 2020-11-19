@@ -138,7 +138,7 @@ export default class App extends Component {
 							</div>
 							<div className="button_row">
 								<button id="print_button" className="background_green" onClick={this.fetchData}>Refresh Data</button>
-								<button id="reset_button" className="background_red" onClick={this.reset}>Reset</button>
+								{/* <button id="reset_button" className="background_red" onClick={this.reset}>Reset</button> */}
 								<button id="skip_button" className="background_yellow" onClick={this.skip}>Skip</button>
 							</div>
 

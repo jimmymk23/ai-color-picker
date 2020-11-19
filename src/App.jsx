@@ -104,6 +104,7 @@ export default class App extends Component {
 	}
 
 	fetchData() {
+		this.setState({ database: [] });
 		fetch('/api-v1/retreive-data')
 			.then(response => response.json())
 			.then(res => {

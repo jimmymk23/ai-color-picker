@@ -9,7 +9,6 @@ export default class App extends Component {
 
 	constructor(props) {
 		super(props);
-		// this.baseAPIurl = process.env.NODE_ENV === 'production' ? '/' : 'http://localhost:4000/';
 
 		this.state = {
 			database: []
@@ -139,7 +138,7 @@ export default class App extends Component {
 							</div>
 							<div className="button_row">
 								<button id="print_button" className="background_green" onClick={this.fetchData}>Refresh Data</button>
-								{/* <button id="reset_button" className="background_red" onClick={this.reset}>Reset</button> */}
+								<button id="reset_button" className="background_red" onClick={this.reset}>Reset</button>
 								<button id="skip_button" className="background_yellow" onClick={this.skip}>Skip</button>
 							</div>
 
@@ -149,10 +148,6 @@ export default class App extends Component {
 								})}
 							</div>
 						</div>
-
-
-
-						{/* {this.state.database === [] && <button id="reset_button" onClick={this.reset}>Reset</button>} */}
 					</div>
 				</div>
       		</div>

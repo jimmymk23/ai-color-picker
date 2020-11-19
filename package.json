@@ -1,7 +1,15 @@
 {
   "name": "ai-color-picker",
-  "version": "0.0.1",
-  "description": "",
+  "version": "1.0.0",
+  "description": "Train an AI to pick the text color suited best for any background color. Contribute to an evergrowing database for accessible data.",
+  "keywords": [
+    "express",
+    "sass",
+    "react",
+    "snowpack",
+    "MERN",
+    "ai"
+  ],
   "main": "index.js",
   "scripts": {
     "dev": "nodemon index.js & snowpack dev",

@@ -12,6 +12,12 @@ module.exports = {
       {
         "input": ['.js', '.jsx']
       }
+    ],
+    [
+      '@snowpack/plugin-webpack',
+      {
+        /* see "Plugin Options" below */
+      },
     ]
   ],
   proxy: {

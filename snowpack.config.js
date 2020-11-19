@@ -14,22 +14,11 @@ module.exports = {
       }
     ]
   ],
-  install: [
-    /* ... */
-  ],
-  installOptions: {
-    /* ... */
+  proxy: {
+    '/api-v1': 'http://localhost:4000/api-v1'
   },
   devOptions: {
-    port: 3000
-  },
-  buildOptions: {
-    /* ... */
-  },
-  proxy: {
-    /* ... */
-  },
-  alias: {
-    /* ... */
-  },
+    port: 3000,
+    open: "safari"
+  }
 };

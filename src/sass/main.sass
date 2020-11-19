@@ -1,4 +1,115 @@
+$main-col: #90cce7
+$text-col: #1d1d1d
+$nav-height: 7vh
+$desktop: 900px
+    
 *
     margin: 0
     padding: 0
     box-sizing: border-box
+
+html, body
+    position: relative
+    font-family: 'Ubuntu', sans-serif
+    overflow-x: hidden
+
+.container
+    width: 90%
+    margin: 0 auto
+
+h1
+    margin-top: 1rem
+
+nav
+    display: flex
+    flex-direction: row
+    justify-content: space-between
+    align-items: center
+    width: 100vw
+    height: $nav-height
+    padding: 0 5vw
+    background-color: $main-col
+    z-index: 3
+    #nav_logo
+        text-transform: uppercase
+        text-decoration: none
+        color: $text-col
+        font-size: 1.5rem
+    #hamburger
+        font-size: 125%
+        padding: .5rem .7rem
+        cursor: pointer
+        border-radius: .5rem
+        &:focus, &:hover
+            background: darken($main-col, 10%)
+        @media (min-width: $desktop)
+            display: none
+    .nav_links
+        position: absolute
+        display: flex
+        right: 0
+        top: $nav-height
+        height: 100vh - $nav-height
+        padding-top: 1rem
+        flex-direction: column
+        background: lighten($main-col, 5%)
+        transform: translate(100%)
+        @media (min-width: $desktop)
+            position: relative
+            flex-direction: row
+            padding: 0
+            top: 0
+            height: 100%
+            background: inherit
+            line-height: $nav-height / 2.5
+            transform: none
+            transition: none
+        a
+            text-decoration: none
+            color: $text-col
+            width: 50vw
+            background: lighten($main-col, 8%)
+            padding: .7rem 1.2rem
+            margin: .4rem .5rem
+            border-radius: .7rem
+            &:focus, &:hover
+                background: lighten($main-col, 20%)
+            &.current
+                background: lighten($main-col, 15%)
+            @media (min-width: $desktop)
+                width: auto
+                background: $main-col
+                &:focus, &:hover
+                    background: lighten($main-col, 2%)
+                &.current
+                    background: lighten($main-col, 4%)
+    .nav_active
+        transform: translate(0%)
+        box-shadow: -5px 0px 100px 2px #2c2e2b91
+        font-size: 1.4rem
+        @media (min-width: $desktop)
+            box-shadow: none
+
+#landing_page_grid
+    display: grid
+    width: 90%
+    margin: 0 auto
+    padding: 2rem 0 0 0
+    grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr))
+    // grid-gap: 15px
+
+.grid_item
+    background: #efefef
+    text-align: center
+    padding: 3rem
+    text-decoration: none
+    color: $text-col
+    border-radius: .7rem
+    background-image: linear-gradient(to bottom, #f5f7fa 0%, #c9dcfa 100%)
+    box-shadow: 0
+    transition: all .1s ease-in-out
+    &:hover
+        box-shadow: 7px 7px 10px 1px #efefef, -7px -7px 10px 1px #ffffff
+
+// Import Color Picker AI styles
+@import 'color-ai'

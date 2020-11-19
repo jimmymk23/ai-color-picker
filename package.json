@@ -1,9 +1,19 @@
 {
+  "name": "ai-color-picker",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
   "scripts": {
-    "start": "snowpack dev",
-    "build": "snowpack build"
+    "dev": "nodemon index.js & snowpack dev",
+    "build": "snowpack build",
+    "start": "node index.js"
   },
   "dependencies": {
+    "brain.js": "^2.0.0-beta.2",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "mongodb": "^3.6.3",
     "react": "^17.0.0",
     "react-dom": "^17.0.0"
   },
@@ -12,6 +22,7 @@
     "@snowpack/plugin-babel": "^2.1.4",
     "@snowpack/plugin-react-refresh": "^2.3.7",
     "@snowpack/plugin-sass": "^1.1.1",
+    "nodemon": "^2.0.6",
     "sass": "^1.29.0",
     "snowpack": "^2.17.1"
   }

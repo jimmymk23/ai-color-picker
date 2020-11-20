@@ -11,6 +11,7 @@ export default class PopUp extends Component {
 
         this.switch = props.switchFunc;
         this.save = props.saveFunc;
+        this.delete = props.deleteFunc;
     }
 
     componentDidMount() {

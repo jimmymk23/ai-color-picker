@@ -10,6 +10,7 @@ export default class DataPoint extends Component {
         this.textColor = props.textColor === 0 ? '#000' : '#FFF';
         this.id = props.id;
         this.initial = props.textColor === 0 ? 'B' : 'W';
+        this.refreshLocalDB = props.refreshDBFunc;
 
         this.state = {
             edit: false,
@@ -58,7 +59,19 @@ export default class DataPoint extends Component {
         }
     }
 
-    delete() { }
+    delete() {
+        if (window.confirm('Are you sure you want to remove this color?')) {
+            fetch('/api-v1/delete', {
+                method: 'POST',
+                headers: {
+                    'Content-type': 'application/json'
+                },
+                body: JSON.stringify({ id: this.id })
+            });
+            this.closeEdit();
+            this.refreshLocalDB();
+        }
+    }
 
     save() {
         if (this.textColor === '#000') {
@@ -93,6 +106,7 @@ export default class DataPoint extends Component {
                     initial={this.state.initial}
                     switchFunc={this.switch}
                     saveFunc={this.save}
+                    deleteFunc={this.delete}
                 />}
             </div>
         )

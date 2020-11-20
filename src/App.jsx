@@ -21,7 +21,7 @@ export default class App extends Component {
 		}
 
 		this.process = this.process.bind(this);
-		this.fetchData = this.fetchData.bind(this);
+		this.refreshLocalDB = this.refreshLocalDB.bind(this);
 		this.skip = this.skip.bind(this);
 		this.reset = this.reset.bind(this);
 	}
@@ -103,7 +103,7 @@ export default class App extends Component {
 		this.color_box.style.backgroundColor = `rgb(${this.BgColor.r * 255}, ${this.BgColor.g * 255}, ${this.BgColor.b * 255})`;
 	}
 
-	fetchData() {
+	refreshLocalDB() {
 		this.setState({ database: [] });
 		fetch('/api-v1/retreive-data')
 			.then(response => response.json())
@@ -115,7 +115,7 @@ export default class App extends Component {
 	reset() {
 		if (window.confirm('Are you sure you want to reset the database? All Data will be lost.')) {
 			fetch('/api-v1/reset-data');
-			this.fetchData();
+			this.refreshLocalDB();
 		}
 	}
 
@@ -138,14 +138,20 @@ export default class App extends Component {
 								<button id="white_button" onClick={this.process} >White</button>
 							</div>
 							<div className="button_row">
-								<button id="print_button" className="background_green" onClick={this.fetchData}>Refresh Data</button>
+								<button id="print_button" className="background_green" onClick={this.refreshLocalDB}>Refresh Data</button>
 								{/* <button id="reset_button" className="background_red" onClick={this.reset}>Reset</button> */}
 								<button id="skip_button" className="background_yellow" onClick={this.skip}>Skip</button>
 							</div>
 
 							<div id="color_data_grid">
 								{Array.from(this.state.database).reverse().map((item) => {
-									return <DataPoint key={item._id} bgColor={item.input} textColor={item.output[0]} id={item._id} />
+									return <DataPoint
+										key={item._id}
+										bgColor={item.input}
+										textColor={item.output[0]}
+										id={item._id}
+										refreshDBFunc={this.refreshLocalDB}
+									/>
 								})}
 							</div>
 						</div>

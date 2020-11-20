@@ -94,7 +94,7 @@ router.post('/process', async (req, res) => {
 
 router.post('/save-edited-color', async (req, res) => {
     const filter = { _id: mongodb.ObjectId(req.body.id) };
-    // update the value of the 'z' field to 42
+    // update the value of the 'output' field to the new color
     const updateDocument = {
         $set: {
             output: [req.body.colorCode]
@@ -102,6 +102,11 @@ router.post('/save-edited-color', async (req, res) => {
     };
     const result = await colorsDB.updateOne(filter, updateDocument);
     res.sendStatus(204);
+});
+
+router.post('/delete', async (req, res) => {
+    colorsDB.deleteOne({ _id: mongodb.ObjectId(req.body.id) });
+    res.sendStatus(200);
 });
 
 router.get('/reset-data', async (req, res) => {

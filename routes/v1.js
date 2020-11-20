@@ -2,6 +2,7 @@ const router = require('express').Router();
 const brain = require('brain.js');
 const client = require('../index.js');
 const dotenv = require('dotenv');
+const mongodb = require("mongodb");
 dotenv.config();
 
 const db = client.db();
@@ -91,6 +92,18 @@ router.post('/process', async (req, res) => {
     });
 });
 
+router.post('/save-edited-color', async (req, res) => {
+    const filter = { _id: mongodb.ObjectId(req.body.id) };
+    // update the value of the 'z' field to 42
+    const updateDocument = {
+        $set: {
+            output: [req.body.colorCode]
+        }
+    };
+    const result = await colorsDB.updateOne(filter, updateDocument);
+    res.sendStatus(204);
+});
+
 router.get('/reset-data', async (req, res) => {
 
     colorsDB.deleteMany();
@@ -112,13 +125,13 @@ router.get('/reset-data', async (req, res) => {
     net.train(docs);
 
     res.sendStatus(200);
-})
+});
 
 router.get('/retreive-data', async (req, res) => {
 
     const docs = await colorsDB.find().toArray();
     res.json(docs);
 
-})
+});
 
 module.exports = router

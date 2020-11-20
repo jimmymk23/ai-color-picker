@@ -61,10 +61,14 @@ export default class DataPoint extends Component {
     delete() { }
 
     save() {
-
+        if (this.textColor === '#000') {
+            this.colorCode = 0;
+        } else {
+            this.colorCode = 1;
+        }
         const data = {
             id: this.id,
-            textColor: this.textColor
+            colorCode: this.colorCode
         }
 
         fetch('api-v1/save-edited-color', {

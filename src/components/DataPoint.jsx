@@ -14,7 +14,7 @@ export default class DataPoint extends Component {
 
         this.state = {
             edit: false,
-            initial: this.initial
+            // initial: this.initial
         }
 
         this.openEdit = this.openEdit.bind(this);
@@ -28,6 +28,8 @@ export default class DataPoint extends Component {
         this.element = document.querySelector(`#data-point-${this.id}`);
         this.element.style.backgroundColor = this.BgColor;
         this.element.style.color = this.textColor;
+        //Set Initial
+        // this.element.textContent = this.initial;
     }
 
     openEdit() {
@@ -52,11 +54,12 @@ export default class DataPoint extends Component {
         this.element.style.color = this.textColor;
 
         // Change Letter
-        if (this.state.initial === 'B') {
-            this.setState({ initial: 'W' });
+        if (this.initial === 'B') {
+            this.initial = 'W';
         } else {
-            this.setState({ initial: 'B' });
+            this.initial = 'B';
         }
+        // this.element.textContent = this.initial;
     }
 
     delete() {
@@ -103,7 +106,7 @@ export default class DataPoint extends Component {
                     BgColor={this.BgColor}
                     textColor={this.textColor}
                     id={this.id}
-                    initial={this.state.initial}
+                    initial={this.initial}
                     switchFunc={this.switch}
                     saveFunc={this.save}
                     deleteFunc={this.delete}

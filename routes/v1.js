@@ -6,7 +6,8 @@ const mongodb = require("mongodb");
 dotenv.config();
 
 const db = client.db();
-const colorsDB = db.collection('colors')
+// const colorsDB = db.collection('colors');
+const colorsDB = process.env.NODE_ENV === 'production' ? db.collection('colors') : db.collection('dev_colors');
 
 const config = {
     binaryThresh: 0.5, // ¯\_(ツ)_/¯
@@ -55,7 +56,8 @@ router.post('/initialize', async (req, res) => {
     const docs = await colorsDB.find().toArray();
     res.json({
         dataDocs: docs,
-        text_color : textColor
+        text_color: textColor,
+        output: output
     });
 });
 
@@ -88,7 +90,8 @@ router.post('/process', async (req, res) => {
     res.json({
         insertedId: entry.insertedId,
         BgColor: newBgColor,
-        proposedTextColor: proposedTextColor
+        proposedTextColor: proposedTextColor,
+        output: output
     });
 });
 
@@ -111,9 +114,9 @@ router.post('/delete', async (req, res) => {
 
 router.get('/reset-data', async (req, res) => {
 
-    colorsDB.deleteMany();
+    await colorsDB.deleteMany();
 
-    const data = [
+    const base_data = [
         {
             input: { r: 0, g: 0, b: 0 },
             output: [1]
@@ -124,12 +127,10 @@ router.get('/reset-data', async (req, res) => {
         }
     ];
 
-    colorsDB.insertMany(data);
+    const added_docs = await colorsDB.insertMany(base_data);
 
-    const docs = await colorsDB.find().toArray();
-    net.train(docs);
-
-    res.sendStatus(200);
+    net.train(added_docs.ops);
+    res.json(added_docs.ops);
 });
 
 router.get('/retreive-data', async (req, res) => {
@@ -138,5 +139,30 @@ router.get('/retreive-data', async (req, res) => {
     res.json(docs);
 
 });
+
+router.post('/add-data', async (req, res) => {
+    const amount_to_add = req.body.amount_to_add;
+
+    const new_data = [];
+
+    for (let i = 0; i < amount_to_add; i++) {
+        //Pick new color
+        let newBgColor = {
+            r: Math.random(),
+            g: Math.random(),
+            b: Math.random()
+        };
+        // Run through network and Convert output to 1 or 0
+        let output = net.run(newBgColor)[0] > .5 ? 1 : 0;
+        // Push object to new_data array
+        new_data.push({
+            input: newBgColor,
+            output: [output]
+        });
+    }
+    // Save new_data array to DB
+    const added_docs = await colorsDB.insertMany(new_data);
+    res.json(added_docs.ops);
+})
 
 module.exports = router

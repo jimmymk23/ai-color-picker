@@ -1,9 +1,10 @@
 // Import Libraries
-import React, { Component } from 'react'
+import React, { Component } from 'react';
 // Import Stylesheets
-import './sass/main.sass'
+import './sass/main.sass';
 // Import Components
 import DataPoint from './components/DataPoint.jsx';
+import ConfidenceBar from './components/ConfidenceBar.jsx';
 
 export default class App extends Component {
 
@@ -11,7 +12,8 @@ export default class App extends Component {
 		super(props);
 
 		this.state = {
-			database: []
+			database: [],
+			confidence: 0
 		}
 
 		this.BgColor = {
@@ -20,10 +22,13 @@ export default class App extends Component {
 			b: Math.random()
 		}
 
+		this.amount_to_add = 100;
+
 		this.process = this.process.bind(this);
 		this.refreshLocalDB = this.refreshLocalDB.bind(this);
 		this.skip = this.skip.bind(this);
 		this.reset = this.reset.bind(this);
+		this.add = this.add.bind(this);
 	}
 
 	componentDidMount() {
@@ -50,7 +55,9 @@ export default class App extends Component {
 			.then(res => {
 				this.guess_color.style.color = res.text_color;
 				this.setState({ database: res.dataDocs });
-			})
+				this.setState({ confidence: res.output });
+				console.log(this.state.confidence);
+			});
 	}
 
 	process(e) {
@@ -81,6 +88,8 @@ export default class App extends Component {
 				this.black_text.style.color = '#000';
 				this.guess_color.style.color = res.proposedTextColor === 0 ? '#000' : '#FFF';
 				this.insertedId = res.insertedId;
+				this.setState({ confidence: res.output });
+				console.log(this.state.confidence);
 			})
 			.then(() => {
 				// Add last selection to local DB Array in state
@@ -114,9 +123,28 @@ export default class App extends Component {
 
 	reset() {
 		if (window.confirm('Are you sure you want to reset the database? All Data will be lost.')) {
-			fetch('/api-v1/reset-data');
-			this.refreshLocalDB();
+			fetch('/api-v1/reset-data')
+				.then(response => response.json())
+				.then(res => {
+					this.setState({ database: res });
+				})
 		}
+	}
+
+	add() {
+		fetch('/api-v1/add-data', {
+			method: 'POST',
+			headers: {
+				'Content-type': 'application/json'
+			},
+			body: JSON.stringify({ amount_to_add: this.amount_to_add })
+		})
+			.then(response => response.json())
+			.then(res => {
+				this.oldDB = Array.from(this.state.database);
+				this.updatedDB = this.oldDB.concat(res);
+				this.setState({ database: this.updatedDB });
+			})
 	}
 
 	render() {
@@ -131,6 +159,7 @@ export default class App extends Component {
 								<p id="black">Black Text</p>
 								<p id="guess-color">Guess Text</p>
 							</div>
+							{/* <ConfidenceBar confidence={this.state.confidence} /> */}
 						</div>
 						<div id="button_section">
 							<div className="button_row">
@@ -139,7 +168,8 @@ export default class App extends Component {
 							</div>
 							<div className="button_row">
 								<button id="print_button" className="background_green" onClick={this.refreshLocalDB}>Refresh Data</button>
-								{/* <button id="reset_button" className="background_red" onClick={this.reset}>Reset</button> */}
+								<button id="add_button" onClick={this.add}>Add {this.amount_to_add} Data</button>
+								<button id="reset_button" className="background_red" onClick={this.reset}>Reset</button>
 								<button id="skip_button" className="background_yellow" onClick={this.skip}>Skip</button>
 							</div>
 

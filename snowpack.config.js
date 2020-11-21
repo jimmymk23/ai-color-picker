@@ -16,7 +16,9 @@ module.exports = {
     [
       '@snowpack/plugin-webpack',
       {
-        /* see "Plugin Options" below */
+        externals: {
+          moment: 'moment'
+        }
       },
     ]
   ],

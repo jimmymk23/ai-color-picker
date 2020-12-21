@@ -2,7 +2,7 @@ const router = require('express').Router();
 const brain = require('brain.js');
 const client = require('../index.js');
 const dotenv = require('dotenv');
-const mongodb = require("mongodb");
+const mongodb = require('mongodb');
 dotenv.config();
 
 const db = client.db();

@@ -22,7 +22,7 @@ export default class App extends Component {
 			b: Math.random()
 		}
 
-		this.amount_to_add = 100;
+		this.amount_to_add = 10;
 
 		this.process = this.process.bind(this);
 		this.refreshLocalDB = this.refreshLocalDB.bind(this);
@@ -44,15 +44,15 @@ export default class App extends Component {
 
 		// Send BG Color and get Text Color to Initialize
 		// fetch(`${this.baseAPIurl}api-text-color-ai/initialize`, {
-		fetch('/api-v1/initialize', {
+		fetch('/api/v1/initialize', {
 			method: 'POST',
 			headers: {
-				'Content-type': 'application/json'
+				'Content-type': 'application/json',
 			},
-			body: JSON.stringify(this.BgColor)
+			body: JSON.stringify(this.BgColor),
 		})
-			.then(response => response.json())
-			.then(res => {
+			.then((response) => response.json())
+			.then((res) => {
 				this.guess_color.style.color = res.text_color;
 				this.setState({ database: res.dataDocs });
 				this.setState({ confidence: res.output });
@@ -74,19 +74,22 @@ export default class App extends Component {
 			chosenTextColor: this.chosenTextColor
 		};
 
-		fetch('/api-v1/process', {
+		fetch('/api/v1/process', {
 			method: 'POST',
 			headers: {
-				'Content-type': 'application/json'
+				'Content-type': 'application/json',
 			},
-			body: JSON.stringify(this.submissionData)
+			body: JSON.stringify(this.submissionData),
 		})
-			.then(response => response.json())
-			.then(res => {
+			.then((response) => response.json())
+			.then((res) => {
 				this.BgColor = res.BgColor;
-				this.color_box.style.backgroundColor = `rgb(${this.BgColor.r * 255}, ${this.BgColor.g * 255}, ${this.BgColor.b * 255})`;
+				this.color_box.style.backgroundColor = `rgb(${
+					this.BgColor.r * 255
+				}, ${this.BgColor.g * 255}, ${this.BgColor.b * 255})`;
 				this.black_text.style.color = '#000';
-				this.guess_color.style.color = res.proposedTextColor === 0 ? '#000' : '#FFF';
+				this.guess_color.style.color =
+					res.proposedTextColor === 0 ? '#000' : '#FFF';
 				this.insertedId = res.insertedId;
 				this.setState({ confidence: res.output });
 				console.log(this.state.confidence);
@@ -97,10 +100,10 @@ export default class App extends Component {
 				this.updatedDB = this.oldDB.concat({
 					input: this.submissionData.BgColor,
 					output: [this.submissionData.chosenTextColor],
-					_id: this.insertedId
+					_id: this.insertedId,
 				});
 				this.setState({ database: this.updatedDB });
-			})
+			});
 	}
 
 	skip() {
@@ -114,80 +117,120 @@ export default class App extends Component {
 
 	refreshLocalDB() {
 		this.setState({ database: [] });
-		fetch('/api-v1/retreive-data')
-			.then(response => response.json())
-			.then(res => {
+		fetch('/api/v1/retreive-data')
+			.then((response) => response.json())
+			.then((res) => {
 				this.setState({ database: res });
-			})
+			});
 	}
 
 	reset() {
 		if (window.confirm('Are you sure you want to reset the database? All Data will be lost.')) {
-			fetch('/api-v1/reset-data')
-				.then(response => response.json())
-				.then(res => {
+			fetch('/api/v1/reset-data')
+				.then((response) => response.json())
+				.then((res) => {
 					this.setState({ database: res });
-				})
+				});
 		}
 	}
 
 	add() {
-		fetch('/api-v1/add-data', {
+		fetch('/api/v1/add-data', {
 			method: 'POST',
 			headers: {
-				'Content-type': 'application/json'
+				'Content-type': 'application/json',
 			},
-			body: JSON.stringify({ amount_to_add: this.amount_to_add })
+			body: JSON.stringify({ amount_to_add: this.amount_to_add }),
 		})
-			.then(response => response.json())
-			.then(res => {
+			.then((response) => response.json())
+			.then((res) => {
 				this.oldDB = Array.from(this.state.database);
 				this.updatedDB = this.oldDB.concat(res);
 				this.setState({ database: this.updatedDB });
-			})
+			});
 	}
 
 	render() {
     	return (
-      		<div className="App">
-				<div className="container">
+			<div className='App'>
+				<div className='container'>
 					<h1>Color Prediction</h1>
-					<div id="color_recognition_container">
-						<div id="color_section">
-							<div id="color">
-								<p id="white">White Text</p>
-								<p id="black">Black Text</p>
-								<p id="guess-color">Guess Text</p>
+					<div id='color_recognition_container'>
+						<div id='color_section'>
+							<div id='color'>
+								<p id='white'>White Text</p>
+								<p id='black'>Black Text</p>
+								<p id='guess-color'>Guess Text</p>
 							</div>
 							{/* <ConfidenceBar confidence={this.state.confidence} /> */}
 						</div>
-						<div id="button_section">
-							<div className="button_row">
-								<button id="black_button" onClick={this.process} >Black</button>
-								<button id="white_button" onClick={this.process} >White</button>
+						<div id='button_section'>
+							<div className='button_row'>
+								<button
+									id='black_button'
+									onClick={this.process}
+								>
+									Black
+								</button>
+								<button
+									id='white_button'
+									onClick={this.process}
+								>
+									White
+								</button>
 							</div>
-							<div className="button_row">
-								<button id="print_button" className="background_green" onClick={this.refreshLocalDB}>Refresh Data</button>
-								<button id="add_button" onClick={this.add}>Add {this.amount_to_add} Data</button>
-								<button id="reset_button" className="background_red" onClick={this.reset}>Reset</button>
-								<button id="skip_button" className="background_yellow" onClick={this.skip}>Skip</button>
+							<div className='button_row'>
+								<button
+									id='print_button'
+									className='background_green'
+									onClick={this.refreshLocalDB}
+								>
+									Refresh Data
+								</button>
+								{process.env.NODE_ENV === 'development' && (
+									<button id='add_button' onClick={this.add}>
+										Add {this.amount_to_add} Data
+									</button>
+								)}
+								{process.env.NODE_ENV === 'development' && (
+									<button
+										id='reset_button'
+										className='background_red'
+										onClick={this.reset}
+									>
+										Reset
+									</button>
+								)}
+								<button
+									id='skip_button'
+									className='background_yellow'
+									onClick={this.skip}
+								>
+									Skip
+								</button>
 							</div>
 
-							<div id="color_data_grid">
-								{Array.from(this.state.database).reverse().map((item) => {
-									return <DataPoint
-										key={item._id}
-										bgColor={item.input}
-										textColor={item.output[0]}
-										id={item._id}
-										refreshDBFunc={this.refreshLocalDB}
-									/>
-								})}
+							<div id='color_data_grid'>
+								{Array.from(this.state.database)
+									.reverse()
+									.map((item) => {
+										return (
+											<DataPoint
+												key={item._id}
+												bgColor={item.input}
+												textColor={item.output[0]}
+												id={item._id}
+												refreshDBFunc={
+													this.refreshLocalDB
+												}
+											/>
+										);
+									})}
 							</div>
 						</div>
 					</div>
 				</div>
-      		</div>
-		)
+			</div>
+		);
 	}
 }

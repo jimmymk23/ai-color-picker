@@ -6,9 +6,12 @@ export default class ConfidenceBar extends Component {
     constructor(props) {
         super(props);
         this.chartRef = React.createRef();
-        this.confidence = props.confidence;
+        this.confidence = (props.confidence - 0.5) * 2;
+        console.log({
+            confidence: props.confidence,
+            barValue: this.confidence
+        })
     }
-
 
     componentDidMount() {
         this.myChartRef = this.chartRef.current.getContext("2d");
@@ -17,19 +20,30 @@ export default class ConfidenceBar extends Component {
             type: "horizontalBar",
             data: {
                 //Bring in data
-                // labels: [""],
-                datasets: [
-                    {
-                        label: 'Black to White',
-                        data: [this.confidence]
-                    }
-                ]
+                data: [this.confidence]
             },
             options: {
-                backgroundColor: 'rbga(10, 75, 165, .9)',
+                color: context => {
+                    var index = context.dataIndex;
+                    var value = context.dataset.data[index];
+                    return value < 0 ? 'red' :  // draw negative values in red
+                        'blue';                 // else, draw negative values in blue\
+                },
+                scales: {
+                    // xAxes: [-1, 1]
+                }
             }
         });
     }
+
+    componentDidUpdate(props) {
+        this.confidence = (props.confidence - 0.5) * 2;
+        console.log({
+            confidence: props.confidence,
+            barValue: this.confidence
+        })
+    }
+
     render() {
         return (
             <div className="confidence_bar">

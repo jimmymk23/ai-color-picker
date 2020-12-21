@@ -64,13 +64,13 @@ export default class DataPoint extends Component {
 
     delete() {
         if (window.confirm('Are you sure you want to remove this color?')) {
-            fetch('/api-v1/delete', {
-                method: 'POST',
-                headers: {
-                    'Content-type': 'application/json'
-                },
-                body: JSON.stringify({ id: this.id })
-            });
+            fetch('/api/v1/delete', {
+				method: 'POST',
+				headers: {
+					'Content-type': 'application/json',
+				},
+				body: JSON.stringify({ id: this.id }),
+			});
             this.closeEdit();
             this.refreshLocalDB();
         }
@@ -87,13 +87,13 @@ export default class DataPoint extends Component {
             colorCode: this.colorCode
         }
 
-        fetch('api-v1/save-edited-color', {
-            method: 'POST',
-            headers: {
-                'Content-type': 'application/json'
-            },
-            body: JSON.stringify(data)
-        })
+        fetch('api/v1/save-edited-color', {
+			method: 'POST',
+			headers: {
+				'Content-type': 'application/json',
+			},
+			body: JSON.stringify(data),
+		});
 
         this.closeEdit();
     }
